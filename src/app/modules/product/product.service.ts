@@ -12,6 +12,7 @@ const createProductIntoDB = async (payload: TProduct) => {
 const getAllProductsFromDB = async (query: Record<string, unknown>) => {
   let searchQuery = Product.find();
 
+  // implementing searching on name and description
   if (query?.searchTerm) {
     const searchTerm = query.searchTerm;
     searchQuery = searchQuery.find({
@@ -29,6 +30,7 @@ const getAllProductsFromDB = async (query: Record<string, unknown>) => {
 const getProductFromDB = async (productId: string) => {
   const result = await Product.isProductExists(productId);
 
+  // checking if product exists
   if (!result) {
     throw new AppError(404, 'Product not found');
   }
@@ -42,6 +44,7 @@ const updateProductIntoDB = async (
 ) => {
   const product = await Product.isProductExists(productId);
 
+  // checking if product exists
   if (!product) {
     throw new AppError(404, 'Product not found');
   }
@@ -52,7 +55,7 @@ const updateProductIntoDB = async (
     ...remainingProductData,
   };
 
-  /* Handle inventory*/
+  // Handle inventory
   if (inventory && Object.keys(inventory).length) {
     for (const [key, val] of Object.entries(inventory)) {
       updatedProduct[`inventory.${key}`] = val; // saving as inventory.quantity etc form
@@ -70,6 +73,7 @@ const updateProductIntoDB = async (
 const deleteProductFromDB = async (productId: string) => {
   const result = await Product.findByIdAndDelete(productId);
 
+  // checking if product exists
   if (!result) {
     throw new AppError(404, 'Product not found');
   }

@@ -15,7 +15,11 @@ router.get('/', ProductControllers.getAllProducts);
 
 router.get('/:productId', ProductControllers.getProduct);
 
-router.put('/:productId', ProductControllers.updateProduct);
+router.put(
+  '/:productId',
+  validateRequest(ProductValidations.updateProductValidationSchema),
+  ProductControllers.updateProduct,
+);
 
 router.delete('/:productId', ProductControllers.deleteProduct);
 

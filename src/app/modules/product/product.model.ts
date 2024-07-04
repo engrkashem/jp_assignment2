@@ -74,7 +74,13 @@ const productModelSchema = new Schema<TProduct, ProductModel>(
   },
 );
 
-/*** Course model ***/
+/*** Custom static method ***/
+productModelSchema.statics.isProductExists = async function (id: string) {
+  // it will check wether a product exists or not
+  return await Product.findById(id);
+};
+
+/*** Product model ***/
 export const Product = model<TProduct, ProductModel>(
   'Product',
   productModelSchema,

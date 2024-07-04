@@ -15,8 +15,6 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode: number = 500;
   const message: string = err?.message || 'Something Went wrong';
 
-  console.log(err);
-
   let errorFilteredData: TGenericErrorResponse = {} as TGenericErrorResponse;
 
   let errorResponseObj: TErrorResponse = {
@@ -44,19 +42,12 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     };
   } else if (err instanceof AppError) {
     statusCode = err.statusCode;
-    errorFilteredData.message = err?.name;
+    errorFilteredData.message = err?.message;
 
-    if (err.flag === 'Unauthorized Access') {
-      errorResponseObj = {
-        success: false,
-        message: err?.flag,
-      };
-    } else {
-      errorResponseObj = {
-        success: false,
-        message: errorFilteredData.message,
-      };
-    }
+    errorResponseObj = {
+      success: false,
+      message: errorFilteredData.message,
+    };
   } else if (err instanceof Error) {
     errorFilteredData.message = err?.name;
     errorResponseObj = {

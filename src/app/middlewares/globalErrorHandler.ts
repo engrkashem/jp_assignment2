@@ -3,6 +3,7 @@ import { ErrorRequestHandler } from 'express';
 
 import { ZodError } from 'zod';
 import AppError from '../errors/AppError';
+import duplicateKeyErrorHandler from '../errors/duplicateKeyErrorHandler';
 import zodErrorhandler from '../errors/zodErrorHandler';
 import {
   TErrorResponse,
@@ -24,6 +25,12 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
   if (err instanceof ZodError) {
     errorFilteredData = zodErrorhandler(err);
+    errorResponseObj = {
+      success: false,
+      message: errorFilteredData.message,
+    };
+  } else if (err?.code === 11000) {
+    errorFilteredData = duplicateKeyErrorHandler(err);
     errorResponseObj = {
       success: false,
       message: errorFilteredData.message,

@@ -11,6 +11,8 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode: number = 500;
   const message: string = err?.message || 'Something Went wrong';
 
+  console.log(err);
+
   const errorFilteredData: TGenericErrorResponse = {} as TGenericErrorResponse;
 
   let errorResponseObj: TErrorResponse = {

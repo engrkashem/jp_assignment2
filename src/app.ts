@@ -1,6 +1,8 @@
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
+import router from './app/routes';
 import sendResponse from './app/utils/sendResponse';
 
 const app: Application = express();
@@ -10,7 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 /*** Routes middlewares ***/
-// app.use('/api', router);
+app.use('/api', router);
 
 // Root route of the server
 app.get('/', (req: Request, res: Response) => {
@@ -23,7 +25,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Global error handling middleware
-// app.use(globalErrorHandler);
+app.use(globalErrorHandler);
 
 // not found API endpoint middleware
 app.use(notFound);

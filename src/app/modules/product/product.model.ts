@@ -28,9 +28,8 @@ const variantSchema = new Schema<TVariant>(
 const inventorySchema = new Schema<TInventory>(
   {
     quantity: {
-      type: String,
+      type: Number,
       required: [true, 'quantity is required'],
-      trim: true,
     },
     inStock: {
       type: Boolean,
@@ -67,7 +66,6 @@ const productModelSchema = new Schema<TProduct, ProductModel>(
     inventory: { type: inventorySchema },
   },
   {
-    timestamps: true,
     toJSON: {
       transform(doc, ret) {
         delete ret.__v;

@@ -55,9 +55,20 @@ const updateProductIntoDB = async (
   return result;
 };
 
+const deleteProductFromDB = async (productId: string) => {
+  const result = await Product.findByIdAndDelete(productId);
+
+  if (!result) {
+    throw new AppError(404, 'Product not found');
+  }
+
+  return result;
+};
+
 export const ProductServices = {
   createProductIntoDB,
   getAllProductsFromDB,
   getProductFromDB,
   updateProductIntoDB,
+  deleteProductFromDB,
 };

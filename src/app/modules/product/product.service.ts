@@ -24,8 +24,40 @@ const getProductFromDB = async (productId: string) => {
   return result;
 };
 
+const updateProductIntoDB = async (
+  productId: string,
+  payload: Partial<TProduct>,
+) => {
+  const product = await Product.isProductExists(productId);
+
+  if (!product) {
+    throw new AppError(404, 'Product not found');
+  }
+
+  const { inventory, ...remainingProductData } = payload;
+
+  const updatedProduct: Record<string, unknown> = {
+    ...remainingProductData,
+  };
+
+  /* Handle inventory*/
+  if (inventory && Object.keys(inventory).length) {
+    for (const [key, val] of Object.entries(inventory)) {
+      updatedProduct[`inventory.${key}`] = val; // saving as inventory.quantity etc form
+    }
+  }
+
+  const result = await Product.findByIdAndUpdate(productId, updatedProduct, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
+
 export const ProductServices = {
   createProductIntoDB,
   getAllProductsFromDB,
   getProductFromDB,
+  updateProductIntoDB,
 };

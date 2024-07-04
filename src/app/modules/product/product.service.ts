@@ -1,4 +1,5 @@
 import AppError from '../../errors/AppError';
+import { searchableFields } from './product.constants';
 import { TProduct } from './product.interface';
 import { Product } from './product.model';
 
@@ -8,8 +9,19 @@ const createProductIntoDB = async (payload: TProduct) => {
   return result;
 };
 
-const getAllProductsFromDB = async () => {
-  const result = await Product.find();
+const getAllProductsFromDB = async (query: Record<string, unknown>) => {
+  let searchQuery = Product.find();
+
+  if (query?.searchTerm) {
+    const searchTerm = query.searchTerm;
+    searchQuery = searchQuery.find({
+      $or: searchableFields.map((field) => ({
+        [field]: { $regex: searchTerm, $options: 'i' },
+      })),
+    });
+  }
+
+  const result = await searchQuery;
 
   return result;
 };

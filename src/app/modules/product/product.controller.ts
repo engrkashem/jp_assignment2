@@ -13,7 +13,7 @@ const createProduct = catchAsyncRequest(async (req, res) => {
 });
 
 const getAllProducts = catchAsyncRequest(async (req, res) => {
-  const result = await ProductServices.getAllProductsFromDB();
+  const result = await ProductServices.getAllProductsFromDB(req.query);
 
   sendResponse(res, {
     status: 200,

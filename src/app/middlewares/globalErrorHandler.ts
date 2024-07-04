@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ErrorRequestHandler } from 'express';
 
+import { ZodError } from 'zod';
 import AppError from '../errors/AppError';
+import zodErrorhandler from '../errors/zodErrorHandler';
 import {
   TErrorResponse,
   TGenericErrorResponse,
@@ -13,14 +15,20 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
   console.log(err);
 
-  const errorFilteredData: TGenericErrorResponse = {} as TGenericErrorResponse;
+  let errorFilteredData: TGenericErrorResponse = {} as TGenericErrorResponse;
 
   let errorResponseObj: TErrorResponse = {
     success: false,
     message: '',
   };
 
-  if (err instanceof AppError) {
+  if (err instanceof ZodError) {
+    errorFilteredData = zodErrorhandler(err);
+    errorResponseObj = {
+      success: false,
+      message: errorFilteredData.message,
+    };
+  } else if (err instanceof AppError) {
     statusCode = err.statusCode;
     errorFilteredData.message = err?.name;
 

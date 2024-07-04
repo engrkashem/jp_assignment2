@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
+import sendResponse from './app/utils/sendResponse';
 
 const app: Application = express();
 
@@ -12,12 +13,12 @@ app.use(cors());
 
 // Root route of the server
 app.get('/', (req: Request, res: Response) => {
-  res.send({ message: 'running' });
-  //   sendResponse(res, {
-  //     success: true,
-  //     message: 'Welcome to Assignment-4 Server. It is running absolutely fine.',
-  //     data: null,
-  //   });
+  sendResponse(res, {
+    success: true,
+    status: 200,
+    message: 'Welcome to JP Assignment-2 Server that is running.',
+    data: null,
+  });
 });
 
 // Global error handling middleware

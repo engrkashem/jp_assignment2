@@ -57,6 +57,13 @@ const createOrderIntoDB = async (payload: TOrder) => {
   console.log(product);
 };
 
+const getAllOrdersFromDB = async () => {
+  const result = await Order.find();
+
+  return result;
+};
+
 export const OrderServices = {
   createOrderIntoDB,
+  getAllOrdersFromDB,
 };

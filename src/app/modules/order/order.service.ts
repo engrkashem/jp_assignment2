@@ -57,8 +57,14 @@ const createOrderIntoDB = async (payload: TOrder) => {
   console.log(product);
 };
 
-const getAllOrdersFromDB = async () => {
-  const result = await Order.find();
+const getAllOrdersFromDB = async (query: Record<string, unknown>) => {
+  let filterQuery = Order.find();
+
+  if (query?.email) {
+    filterQuery = filterQuery.find({ email: query.email });
+  }
+
+  const result = await filterQuery;
 
   return result;
 };
